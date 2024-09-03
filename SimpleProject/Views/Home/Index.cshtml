@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Product>
+@{
+
+}
+
+    <head>Page</head>
+<h1>Fist element @ViewBag.Name    @Model.FirstOrDefault().Name </h1>
+@{
+    var producs = Model.ToList();
+}
+
+
+<h1>Second element @ViewBag.Name  @(producs.Count>1?producs[1].Name:"No second element")</h1>
+
+
+@section Scripts {
+ 
+}
+
