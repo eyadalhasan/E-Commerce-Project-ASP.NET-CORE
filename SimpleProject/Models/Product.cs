@@ -26,22 +26,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class Product
 {
+    //[DatabaseGenerated(DatabaseGeneratedOption
+    //    .Identity)]
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "The Name field is required.")]
-    //[StringLength(100)]
-    [Remote(action: "IsProductNameExist", controller: "Product", HttpMethod = "POST", ErrorMessage = "Name already exists.")]
     public string Name { get; set; }
 
-    [Range(0.01, 10000, ErrorMessage = "The Price must be between 0.01 and 10000.")]
+
     public decimal Price { get; set; }
 
-    [NotMapped]
-    public IFormFile? File { get; set; }
-    public string? Path { get; set; }
     [ForeignKey("Category")] //or nameof(Category) 
     public int CategoryID { get; set; }
-    public Category ?Category { get; set; }
+    public Category? Category { get; set; }
+
+    public ICollection<ProductImages> ProductImages { get; set; } = new HashSet<ProductImages>();
+
+
+    // 1 category==>M product
 
 
 

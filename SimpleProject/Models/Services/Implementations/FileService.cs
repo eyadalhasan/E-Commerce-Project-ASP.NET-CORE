@@ -63,7 +63,7 @@ namespace SimpleProject.Models.Services.Implementations
             }
             catch (Exception ex)
             {
-                return "problem";
+                return ex.Message + "---" + ex.InnerException;
             }
 
 

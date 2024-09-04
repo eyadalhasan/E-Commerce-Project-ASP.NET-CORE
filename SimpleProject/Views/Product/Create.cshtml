@@ -1,9 +1,10 @@
-﻿@model Product
+﻿@model AddProductViewModel
 
 <div>
     <form asp-action="Create" method="Post" enctype="multipart/form-data">
         <!-- Changed to "ModelOnly" to display only model-level validation errors -->
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
 
         <div>
             <input class="form-control" type="text" data-val="true"
@@ -16,20 +17,21 @@
                   data-valmsg-for="Name" data-valmsg-replace="true"></span>
 
         </div>
-
+        
         <div>
             <label for="Price">Price</label>
             <input asp-for="Price" class="form-control"  value="0"/>
             <span asp-validation-for="Price" class="text-danger" ></span>
+           
         </div> 
-        <div> 
-          <label asp-for="File">File</label>
-          <input asp-for="File" type="file"/>
+       <div> 
+          <label asp-for="Files">File</label>
+          <input asp-for="Files" type="file" multiple/>
 
         </div>
         <div>
-            <label asp-for="CategoryID">Category ID</label>
-            <select asp-for="CategoryID" asp-items="@ViewBag.categories">
+            <label asp-for="CategoryId">Category ID</label>
+            <select asp-for="CategoryId" asp-items="@ViewBag.categories">
              </select>
 
         </div>

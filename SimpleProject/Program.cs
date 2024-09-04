@@ -4,6 +4,7 @@ using SimpleProject.Controllers;
 using SimpleProject.Data;
 using SimpleProject.Models.Services.Implementations;
 using SimpleProject.Models.Services.Interfaces;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var greeting = builder.Configuration["key"];
@@ -15,6 +16,7 @@ builder.Services.AddControllersWithViews();
 //create one instance for the project lifecycle
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IFileService, FileService>();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddDbContext<AppDBContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<ICategoryService, CategoryService>();

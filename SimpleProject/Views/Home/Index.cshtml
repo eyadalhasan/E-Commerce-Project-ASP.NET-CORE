@@ -1,16 +1,38 @@
-﻿@model IEnumerable<Product>
-@{
+﻿@model IEnumerable<Category>
 
+
+<div class="container">
+<h1>@ViewBag.Title</h1>
+<div class="row">
+
+
+@foreach(var category in Model)
+
+{
+    foreach(var product in category.Products)
+    {
+        <div class="card col-lg-4 col-md-6 col-sm-12 p-2" >
+  
+            <div class="card-body">
+                @product.Price
+                <div>
+                    @category.Name
+                </div>
+
+                @product.Name
+            </div>
+    
+            <div class="card-footer">
+
+            <a asp-action="details" asp-controller="Product" aso-route-id="@product.Id" class="btn btn-info">Details</a>
+            </div>
+
+        </div>
+        
+    }
 }
-
-    <head>Page</head>
-<h1>Fist element @ViewBag.Name    @Model.FirstOrDefault().Name </h1>
-@{
-    var producs = Model.ToList();
-}
-
-
-<h1>Second element @ViewBag.Name  @(producs.Count>1?producs[1].Name:"No second element")</h1>
+</div>
+</div>
 
 
 @section Scripts {

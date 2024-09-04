@@ -8,6 +8,8 @@ using System.Threading.Tasks.Dataflow;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SimpleProject.ViewModels;
+using AutoMapper;
 
 namespace SimpleProject.Controllers
 {
@@ -17,17 +19,20 @@ namespace SimpleProject.Controllers
 
         private readonly IFileService _fileService;
         private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
 
 
 
 
 
 
-        public ProductController(IProductService productservice, IFileService fileService, ICategoryService categoryService)
+        public ProductController(IProductService productservice, IFileService fileService, ICategoryService categoryService, IMapper mapper)
         {
             _productservice = productservice;
             _fileService = fileService;
             _categoryService = categoryService;
+            _mapper = mapper;
+
 
 
             //_productservice.AddProduct(new Models.Product() { Id = 3, Name = "Tahina" });
@@ -55,35 +60,28 @@ namespace SimpleProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(AddProductViewModel model)
         {
             try
 
             {
                 if (ModelState.IsValid)
                 {
-                    if (product?.File?.Length > 0)
-                    {
+
+                    //Product product = new Product() { Name = model.Name, Price = model.Price, CategoryID = model.CategoryId };
+                    Product product = _mapper.Map<Product>(model);
 
 
-                        var path = await _fileService.UploadFile(product.File, "/images");
-                        product.Path = path;
-
-                        if (path == "problem")
-                        {
-                            return BadRequest();
-
-                        }
-                    }
 
 
-                    var result = await _productservice.AddProduct(product);
+
+                    var result = await _productservice.AddProduct(product, model.Files);
                     if (result != "success")
                     {
                         ModelState.AddModelError(string.Empty, result);
                         ViewData["categories"] = new SelectList(await _categoryService.GetCategoriesAsync(), "Id", "Name");
 
-                        return View(product);
+                        return View(model);
                     }
 
 
@@ -96,7 +94,7 @@ namespace SimpleProject.Controllers
                 {
                     ViewData["categories"] = new SelectList(await _categoryService.GetCategoriesAsync(), "Id", "Name");
 
-                    return View(product);// stay them fulled
+                    return View(model);// stay them fulled
                     //return RedirectToAction() Will reset the fields
                 }
 
@@ -110,6 +108,7 @@ namespace SimpleProject.Controllers
             }
 
         }
+
         [HttpGet("{controller}/details/{id}")]
 
         public async Task<IActionResult> Details(int id)
@@ -150,8 +149,8 @@ namespace SimpleProject.Controllers
                 if (id == model.Id)
                 {
 
-                    var path = await _fileService.UploadFile(model?.File, "/images");
-                    model.Path = path;
+                    //var path = await _fileService.UploadFile(model?.File, "/images");
+                    //model.Path = path;
                     await _productservice.UpdateProduct(model);
 
                     var products = await _productservice.GetProducts();

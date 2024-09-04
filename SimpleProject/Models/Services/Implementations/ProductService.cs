@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleProject.Data;
 using SimpleProject.Models.Services.Interfaces;
@@ -30,14 +31,42 @@ namespace SimpleProject.Models.Services.Implementations
 
         }
         #endregion
-        public async Task<string> AddProduct(Product product)
+        public async Task<string> AddProduct(Product product, List<IFormFile>? Files)
         {
             try
             {
+                var pathList = new List<string>();
+                if (Files != null && Files.Count > 0)
+                {
+                    foreach (var file in Files)
+                    {
+                        var path = await _fileService.UploadFile(file, "/images");
+                        if (!path.StartsWith("/images"))
+                        {
+                            pathList.Add(path);
+                            return path;
 
 
+                        }
+
+
+                    }
+
+
+                }
                 await _context.Product.AddAsync(product);
                 await _context.SaveChangesAsync();
+                var ProductImages = new List<ProductImages>();
+                foreach (var path in pathList)
+                {
+                    var ProductImage = new ProductImages() { Path = path, ProductId = product.Id };
+
+
+                    ProductImages.Add(ProductImage);
+                    _context.ProductImages.AddRange(ProductImages);
+                }
+
+
                 return "success";
             }
             catch (Exception ex)
@@ -49,12 +78,14 @@ namespace SimpleProject.Models.Services.Implementations
             }
         }
 
+
+
         public async Task<string> DeleteProduct(Product product)
         {
             try
             {
 
-                _fileService.deleteFile(product.Path);
+                //_fileService.deleteFile(product.Path);
                 _context.Product.Remove(product);
                 await _context.SaveChangesAsync();
                 return "success";
@@ -100,8 +131,8 @@ namespace SimpleProject.Models.Services.Implementations
                 {
                     model.Name = product.Name;
                     model.Price = product.Price;
-                    model.File = product.File;
-                    model.Path = product.Path;
+                    //model.File = product.File;
+                    //model.Path = product.Path;
                     _context.Product.Update(model);
                     await _context.SaveChangesAsync();
                     return "success";

@@ -8,8 +8,10 @@ namespace SimpleProject.Models
         [Key]
         public int Id { get; set; }
 
-
         public ICollection<Product> Products { get; set; } = new HashSet<Product>();
+
+
+
 
     }
 }

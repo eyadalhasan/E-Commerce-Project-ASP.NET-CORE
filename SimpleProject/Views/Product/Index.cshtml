@@ -1,4 +1,4 @@
-﻿@model IEnumerable< Product>
+﻿@model IEnumerable<Product>
 @{
     // Layout = "~/Views/Shared/_Layout.cshtml";
     // Layout=null if I do not need layout and I'm using view start
@@ -42,9 +42,9 @@
                     <td>  <a asp-controller="Product" asp-action="details" asp-route-id="@item.Id" class="btn btn-info">Detials</a></td>
 
                     <td>
-<img src="@item.Path" alt="No" width="50" height="50"/>
+@* <img src="@item.Path" alt="No" width="50" height="50"/>
                     </td>
-                    <p>@item.Path</p>
+                    <p>@item.Path</p> *@
                     <td>  <a asp-controller="Product" asp-action="update" asp-route-id="@item.Id" class="btn btn-info">Edit</a></td>
                     <td>  <a asp-controller="Product" asp-action="delete" asp-route-id="@item.Id" class="btn btn-info">Delete</a></td>
 

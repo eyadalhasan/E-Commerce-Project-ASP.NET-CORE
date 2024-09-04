@@ -16,13 +16,13 @@ namespace SimpleProject.Data
         }
 
 
-
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
 
         }
         public DbSet<Product> Product { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<ProductImages> ProductImages { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
