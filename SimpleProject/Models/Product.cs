@@ -42,6 +42,7 @@ public class Product
     public ICollection<ProductImages> ProductImages { get; set; } = new HashSet<ProductImages>();
 
 
+
     // 1 category==>M product
 
 
