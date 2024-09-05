@@ -8,6 +8,7 @@
         public Task<string> DeleteProduct(Product product);
         public Task<string> UpdateProduct(Product product);
         public Task<bool> IsProductNameExist(string name);
+        public string GetTitle();
 
 
 

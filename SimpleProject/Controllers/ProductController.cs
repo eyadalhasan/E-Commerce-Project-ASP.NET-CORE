@@ -62,6 +62,7 @@ namespace SimpleProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AddProductViewModel model)
         {
+
             try
 
             {

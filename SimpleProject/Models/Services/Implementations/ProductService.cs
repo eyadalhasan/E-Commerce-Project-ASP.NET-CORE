@@ -33,9 +33,13 @@ namespace SimpleProject.Models.Services.Implementations
         #endregion
         public async Task<string> AddProduct(Product product, List<IFormFile>? Files)
         {
+            var trans = _context.Database.BeginTransaction();
+            var pathList = new List<string>();
             try
             {
-                var pathList = new List<string>();
+                await _context.Product.AddAsync(product);
+                await _context.SaveChangesAsync();
+
                 if (Files != null && Files.Count > 0)
                 {
                     foreach (var file in Files)
@@ -54,8 +58,7 @@ namespace SimpleProject.Models.Services.Implementations
 
 
                 }
-                await _context.Product.AddAsync(product);
-                await _context.SaveChangesAsync();
+
                 var ProductImages = new List<ProductImages>();
                 foreach (var path in pathList)
                 {
@@ -65,15 +68,18 @@ namespace SimpleProject.Models.Services.Implementations
                     ProductImages.Add(ProductImage);
                     _context.ProductImages.AddRange(ProductImages);
                 }
-
+                await trans.CommitAsync();
 
                 return "success";
             }
             catch (Exception ex)
             {
+                await trans.RollbackAsync();
+                foreach (var file in pathList)
+                {
+                    _fileService.deleteFile(file);
+                }
                 return ex.Message + "--" + ex.InnerException;
-
-
 
             }
         }
@@ -152,8 +158,10 @@ namespace SimpleProject.Models.Services.Implementations
 
         }
 
-
-
+        public string GetTitle()
+        {
+            return "Home Title";
+        }
     }
 }
 
